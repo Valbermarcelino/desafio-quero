@@ -1,0 +1,16 @@
+{
+  "name": "desafio-quero",
+  "version": "1.0.0",
+  "description": "Bem-vindo(a) ao **Desafio de Back-End da Quero Educação**! 🎉 Este desafio foi criado para avaliar suas habilidades em desenvolvimento de back-end, com foco na implementação de funcionalidades para filtrar e exibir ofertas de cursos.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
