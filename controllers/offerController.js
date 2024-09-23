@@ -88,6 +88,17 @@ function paginate(offers, page, itemsPerPage) {
     };
 }
 
+// Função para selecionar as propriedades a serem retornadas
+function selectProperties(offer, fields) {
+    const selectedOffer = {};
+    fields.forEach(field => {
+        if (offer.hasOwnProperty(field)) {
+            selectedOffer[field] = offer[field];
+        }
+    });
+    return selectedOffer;
+}
+
 exports.getFormattedOffers = (req, res) => {
     const filters = {
         level: req.query.level,
@@ -122,11 +133,18 @@ exports.getFormattedOffers = (req, res) => {
         iesName: offer.iesName
     }));
 
+    // Seleção de propriedades (se o parâmetro "fields" estiver presente)
+    let finalOffers = formattedOffers;
+    if (req.query.fields) {
+        const fields = req.query.fields.split(',').map(field => field.trim());
+        finalOffers = formattedOffers.map(offer => selectProperties(offer, fields));
+    }
+
     res.json({
         page: paginatedOffers.page,
         itemsPerPage: paginatedOffers.itemsPerPage,
         totalItems: paginatedOffers.totalItems,
         totalPages: paginatedOffers.totalPages,
-        offers: formattedOffers
+        offers: finalOffers
     });
 };
