@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const offerController = require('../controllers/offerController'); // Importação correta do controlador
+const offerController = require('../controllers/offerController');
 
-// Definição da rota
+// Rota para obter ofertas com filtros e ordenação
 router.get('/', offerController.getFormattedOffers);
 
 module.exports = router;
