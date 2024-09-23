@@ -26,7 +26,6 @@ function formatLevel(level) {
     }
 }
 
-// Função para aplicar filtros, busca e ordenação
 function applyFiltersAndSorting(offers, filters, sortBy) {
     let filteredOffers = [...offers];
 
@@ -73,7 +72,22 @@ function applyFiltersAndSorting(offers, filters, sortBy) {
     return filteredOffers;
 }
 
-// Controlador principal
+function paginate(offers, page, itemsPerPage) {
+    const totalItems = offers.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedOffers = offers.slice(startIndex, endIndex);
+
+    return {
+        page,
+        itemsPerPage,
+        totalItems,
+        totalPages,
+        offers: paginatedOffers
+    };
+}
+
 exports.getFormattedOffers = (req, res) => {
     const filters = {
         level: req.query.level,
@@ -85,11 +99,18 @@ exports.getFormattedOffers = (req, res) => {
 
     const sortBy = req.query.sortBy;
 
+    // Parâmetros de paginação
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
+
     // Aplicar filtros e ordenação
     const filteredAndSortedOffers = applyFiltersAndSorting(offers, filters, sortBy);
 
+    // Aplicar paginação
+    const paginatedOffers = paginate(filteredAndSortedOffers, page, itemsPerPage);
+
     // Formatar os resultados
-    const formattedOffers = filteredAndSortedOffers.map(offer => ({
+    const formattedOffers = paginatedOffers.offers.map(offer => ({
         courseName: offer.courseName,
         rating: offer.rating,
         fullPrice: formatPrice(offer.fullPrice),
@@ -101,5 +122,11 @@ exports.getFormattedOffers = (req, res) => {
         iesName: offer.iesName
     }));
 
-    res.json(formattedOffers);
+    res.json({
+        page: paginatedOffers.page,
+        itemsPerPage: paginatedOffers.itemsPerPage,
+        totalItems: paginatedOffers.totalItems,
+        totalPages: paginatedOffers.totalPages,
+        offers: formattedOffers
+    });
 };
