@@ -3,8 +3,9 @@
 ## Visão geral
 
 Instale as dependêncis (dependências adicionadas no projeto: Express e nodemon)
+- `npm install`
 
-Inicie o projeto com 'npm start' ou 'npx nodemon index.js'
+Inicie o projeto com `npm start` ou `npx nodemon index.js` pu `ǹode index.js`
 
 Servidor irá rodar locamente na porta 3001: http://localhost:3001
 
